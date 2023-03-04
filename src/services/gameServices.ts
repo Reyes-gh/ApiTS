@@ -5,15 +5,14 @@ import gameData from './games.json'
 const games: GameEntry[] = gameData as GameEntry[]
 
 export const getGames = (): GameEntry[] => games
+export const getGamesNoId = (): NewGameEntry[] => games
 
-export const findId = (id: number): GameNoTipo | undefined => {
+export const findId = (id: number): GameEntry | undefined => {
   const entry = games.find(d => d.id === id)
 
   if (entry != null) {
-    const { tipo, ...restOfGame } = entry
-    return restOfGame
+    return entry
   }
-
   return undefined
 }
 

@@ -1,7 +1,6 @@
 import express from 'express' // ESModules
-
 import gameRoutes from './routes/games'
-
+import * as sql from '../sql'
 const app = express()
 app.use(express.json()) // middleware que transforma la req.body a un json
 
@@ -12,8 +11,9 @@ app.get('/ping', (_req, res) => {
   res.send('pong')
 })
 
-app.use('/api/games', gameRoutes)
+app.use('/games', gameRoutes)
 
 app.listen(PORT, () => {
   console.log(`Servidor abierto en puerto ${PORT}`)
+  sql.updateDB()
 })

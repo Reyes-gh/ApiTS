@@ -44,4 +44,5 @@ const toNewGameEntry = (object: any): NewGameEntry => {
 
   return newEntry
 }
+
 export default toNewGameEntry
