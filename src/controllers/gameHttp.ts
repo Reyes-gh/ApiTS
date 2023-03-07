@@ -25,3 +25,8 @@ export const updateGameWeb = (req: Request, res: Response): null => {
   actions.updateGame(req.body.id, req.body.name, req.body.genre).then(() => res.status(200).send()).catch(() => res.status(404).send)
   return null
 }
+
+export const getDTOWeb = (req: Request, res: Response): null => {
+  actions.getDTO(req.params.dto).then((resp) => res.json(resp)).catch(() => res.status(404).send)
+  return null
+}

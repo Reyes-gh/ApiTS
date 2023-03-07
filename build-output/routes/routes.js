@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 'use strict'
 const __createBinding = (this && this.__createBinding) || (Object.create
   ? function (o, m, k, k2) {

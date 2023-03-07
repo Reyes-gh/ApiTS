@@ -78,16 +78,34 @@ export default class Sql implements GameMethods {
 
   async updateGame (id: Number, newName: String, newGenre: String): Promise<Boolean> {
     return await new Promise<Boolean>((resolve, reject) => {
-      console.log('hola, he llegado al SQL!')
-      console.log('con estos valores:')
-      console.log(newName, id, newGenre)
       connection.query('UPDATE games SET name=(?), genre=(?) WHERE id=(?)', [newName, newGenre, id], function (error) {
         if (error != null) {
           reject(error)
-          console.log('Ha fallado el update... qué ha podido pasar?')
+          console.log('Ha fallado el update, comprueba el JSON')
         } else {
           resolve(true)
         }
+      })
+    })
+  }
+
+  async getDTO (genre: String): Promise<Game[]> {
+    return await new Promise<Game[]>((resolve, reject) => {
+      connection.query('SELECT * FROM games g INNER JOIN genres ge ON g.genre=ge.genre WHERE g.genre=(?)', [genre], function (error, results) {
+        if (error != null) {
+          reject(error)
+          console.log('Algo ha fallado! No se han podido extraer los juegos de dicha categoría')
+        }
+        const games: Game[] = []
+        results.forEach((game: any) => {
+          games.push({
+            id: game.id,
+            name: game.name,
+            genre: game.genre
+          })
+        })
+        console.log(games)
+        resolve(games)
       })
     })
   }

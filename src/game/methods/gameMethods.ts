@@ -7,5 +7,6 @@ export default interface GameMethods {
   getGames: () => Promise<Game[]>
   delGame: (id: Number) => Promise<Boolean>
   updateGame: (id: Number, newName: String, newGenre: String) => Promise<Boolean>
+  getDTO: (newGenre: String) => Promise<Game[]>
 
 }
