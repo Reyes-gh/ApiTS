@@ -1,4 +1,3 @@
-/* eslint-disable no-void */
 'use strict'
 const __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
   function adopt (value) { return value instanceof P ? value : new P(function (resolve) { resolve(value) }) }
@@ -10,6 +9,11 @@ const __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, 
   })
 }
 Object.defineProperty(exports, '__esModule', { value: true })
+/**
+ * Creamos un método al que le pasamos por parámetro una ID, que servirá para borrar el juego elegido.
+ * @param methods
+ * @returns Boolean
+ */
 const delGameC = (methods) => (id) => __awaiter(void 0, void 0, void 0, function * () {
   return yield methods.delGame(id)
 })

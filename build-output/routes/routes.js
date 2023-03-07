@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 'use strict'
 const __createBinding = (this && this.__createBinding) || (Object.create
   ? function (o, m, k, k2) {
@@ -39,7 +38,7 @@ route.get('/games', web.getGamesWeb)
 // Apartado 2 (Devolverá un juego por su ID)
 route.get('/games/:id', web.getGameWeb)
 // Apartado 3 (Devolverá juegos mediante DTO (los que compartan mismo género por ejemplo))
-route.get('/games/dto')
+route.get('/games/genre/:dto', web.getDTOWeb)
 // Apartado 4 (Añadirá un nuevo juego pasándole un JSON en el body)
 route.post('/games', web.addGameWeb)
 // Apartado 5 (Actualizará un juego)

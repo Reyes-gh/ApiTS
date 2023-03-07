@@ -1,7 +1,7 @@
 
 /**
- * Aquí se aloja el juego como tipo, donde se recogerá el modelo para formar uno con ID
- * Nombre, tipo... Etc
+ * Aquí se aloja el juego como objeto, donde se recogerá el modelo para formar uno con ID
+ * Nombre, género... Etc
  * @author AlexRG
  */
 

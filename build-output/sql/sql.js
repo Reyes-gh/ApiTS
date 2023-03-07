@@ -1,6 +1,4 @@
-/* eslint-disable no-void */
 'use strict'
-/* eslint-disable @typescript-eslint/restrict-template-expressions */
 const __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
   function adopt (value) { return value instanceof P ? value : new P(function (resolve) { resolve(value) }) }
   return new (P || (P = Promise))(function (resolve, reject) {
@@ -11,6 +9,12 @@ const __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, 
   })
 }
 Object.defineProperty(exports, '__esModule', { value: true })
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
+/**
+ * Clase SQL donde conectaremos con la base de datos en la cual realizaremos las querys.
+ *
+ * @author AlexRG
+ */
 const mysql = require('mysql')
 const connection = mysql.createConnection({
   host: 'localhost',
@@ -20,7 +24,15 @@ const connection = mysql.createConnection({
   port: 3306
 })
 connection.connect()
+// la clase Sql exporta los siguientes métodos:
 class Sql {
+  /**
+     * El método addGame se encarga de añadir un juego y devuelve true si lo ha conseguido. En caso contrario devuelve el error recibido
+     * @param id
+     * @param name
+     * @param genre
+     * @returns Boolean
+     */
   addGame (id, name, genre) {
     return __awaiter(this, void 0, void 0, function * () {
       return yield new Promise((resolve, reject) => {
@@ -36,6 +48,12 @@ class Sql {
     })
   }
 
+  /**
+     *  El método getGame se encarga de buscar un juego por la ID introducida por el usuario, al no dar error devuelve
+     *  un nuevo objeto de tipo Game con las características de lo conseguido en SQL
+     * @param id
+     * @returns Game
+     */
   getGame (id) {
     return __awaiter(this, void 0, void 0, function * () {
       return yield new Promise((resolve, reject) => {
@@ -54,10 +72,15 @@ class Sql {
     })
   }
 
+  /**
+     * Este método se encarga de borrar un juego con una ID concreta introducida por el usuario
+     * @param id
+     * @returns Boolean
+     */
   delGame (id) {
     return __awaiter(this, void 0, void 0, function * () {
       return yield new Promise((resolve, reject) => {
-        connection.query('DELETE FROM games WHERE id=(?)', [id], function (error) {
+        connection.query('DELETE FROM games WHERE games.id=(?)', [id], function (error) {
           if (error != null) {
             reject(error)
             console.log('No se ha podido borrar el elemento')
@@ -68,6 +91,11 @@ class Sql {
     })
   }
 
+  /**
+     * El método getGames se encarga de recorrer todos y cada uno de los resultados de la base de datos y añadirlos como
+     * Game a un array de juegos (Game[]) así podemos mostrarlo independientemente de si son uno o varios.
+     * @returns Game[]
+     */
   getGames () {
     return __awaiter(this, void 0, void 0, function * () {
       return yield new Promise((resolve, reject) => {
@@ -90,19 +118,53 @@ class Sql {
     })
   }
 
+  /**
+     * Este método se encarga de cambiar el nombre y el género de un juego ya introducido en la tabla, y para acceder a ese
+     * juego pasamos por parámetro la ID. Devuelve true si no hay errores
+     * @param id
+     * @param newName
+     * @param newGenre
+     * @returns Boolean
+     */
   updateGame (id, newName, newGenre) {
     return __awaiter(this, void 0, void 0, function * () {
       return yield new Promise((resolve, reject) => {
-        console.log('hola, he llegado al SQL!')
-        console.log('con estos valores:')
-        console.log(newName, id, newGenre)
         connection.query('UPDATE games SET name=(?), genre=(?) WHERE id=(?)', [newName, newGenre, id], function (error) {
           if (error != null) {
             reject(error)
-            console.log('Ha fallado el update... qué ha podido pasar?')
+            console.log('Ha fallado el update, comprueba el JSON')
           } else {
             resolve(true)
           }
+        })
+      })
+    })
+  }
+
+  /**
+     * Devuelve un array de juegos que cumplan con las características pedidas, ya sea recoger todos los juegos que compartan género con la tabla
+     * géneros.
+     * @param genre
+     * @returns Game[]
+     */
+  getDTO (genre) {
+    return __awaiter(this, void 0, void 0, function * () {
+      return yield new Promise((resolve, reject) => {
+        connection.query('SELECT * FROM games g INNER JOIN genres ge ON g.genre=ge.genre WHERE g.genre=(?)', [genre], function (error, results) {
+          if (error != null) {
+            reject(error)
+            console.log('Algo ha fallado! No se han podido extraer los juegos de dicha categoría')
+          }
+          const games = []
+          results.forEach((game) => {
+            games.push({
+              id: game.id,
+              name: game.name,
+              genre: game.genre
+            })
+          })
+          console.log(games)
+          resolve(games)
         })
       })
     })

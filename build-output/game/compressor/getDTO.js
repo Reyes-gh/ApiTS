@@ -10,11 +10,12 @@ const __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, 
 }
 Object.defineProperty(exports, '__esModule', { value: true })
 /**
- * El método addGameC recibirá por parámetro una id, nombre y género para así poder crear un nuevo objeto Game
+ * Importamos el objeto juego y los métodos para utilizar el que queremos, en este caso el DTO, al que le pasamos por parámetro
+ * el género que la clase Sql usará con el INNER JOIN
  * @param methods
- * @returns Boolean
+ * @returns Game[]
  */
-const addGameC = (methods) => (id, name, genre) => __awaiter(void 0, void 0, void 0, function * () {
-  return yield methods.addGame(id, name, genre)
+const getDTOC = (methods) => (genre) => __awaiter(void 0, void 0, void 0, function * () {
+  return yield methods.getDTO(genre)
 })
-exports.default = addGameC
+exports.default = getDTOC

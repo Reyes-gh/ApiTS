@@ -1,4 +1,3 @@
-/* eslint-disable no-void */
 'use strict'
 const __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
   function adopt (value) { return value instanceof P ? value : new P(function (resolve) { resolve(value) }) }
@@ -10,6 +9,11 @@ const __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, 
   })
 }
 Object.defineProperty(exports, '__esModule', { value: true })
+/**
+ * Importamos el objeto juego para trabajar con él, así como el método de la clase gameMethods que utilizaremos.
+ * @param methods
+ * @returns Game[]
+ */
 const getGamesC = (methods) => () => __awaiter(void 0, void 0, void 0, function * () {
   return yield methods.getGames()
 })
