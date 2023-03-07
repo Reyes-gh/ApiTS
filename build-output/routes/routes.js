@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 'use strict'
 const __createBinding = (this && this.__createBinding) || (Object.create
   ? function (o, m, k, k2) {
@@ -32,29 +31,18 @@ const __importDefault = (this && this.__importDefault) || function (mod) {
 }
 Object.defineProperty(exports, '__esModule', { value: true })
 const express_1 = __importDefault(require('express'))
-const gameServices = __importStar(require('../services/gameServices'))
-const utils_1 = __importDefault(require('../utils'))
-const router = express_1.default.Router()
-router.get('/', (_req, res) => {
-  res.send(gameServices.getGamesNoTipo())
-})
-router.get('/:id', (req, res) => {
-  const gameWithId = gameServices.findId(+req.params.id)
-  return (gameWithId != null)
-    ? res.send(gameWithId)
-    : res.sendStatus(404)
-})
-router.post('/', (req, res) => {
-  try {
-    const newGameEntry = (0, utils_1.default)(req.body)
-    const addedGameEntry = gameServices.addGame(newGameEntry)
-    res.json(addedGameEntry)
-    res.send('Saving videogame...')
-  } catch (e) {
-    res.status(400)
-    if (e instanceof Error) {
-      res.send(e.message)
-    }
-  }
-})
-exports.default = router
+const web = __importStar(require('../controllers/gameHttp'))
+const route = express_1.default.Router()
+// Apartado 1 (Devolverá todos los juegos)
+route.get('/games', web.getGamesWeb)
+// Apartado 2 (Devolverá un juego por su ID)
+route.get('/games/:id', web.getGameWeb)
+// Apartado 3 (Devolverá juegos mediante DTO (los que compartan mismo género por ejemplo))
+route.get('/games/dto')
+// Apartado 4 (Añadirá un nuevo juego pasándole un JSON en el body)
+route.post('/games', web.addGameWeb)
+// Apartado 5 (Actualizará un juego)
+route.put('/games', web.updateGameWeb)
+// Apartado 6 (Borrará un juego por su id)
+route.delete('/games/:id', web.delGameWeb)
+exports.default = route
