@@ -10,7 +10,7 @@ import { Request, Response } from 'express'
  */
 
 export const addGameWeb = (req: Request, res: Response): null => {
-  actions.addGame(req.body.id, req.body.name, req.body.genre).then(() => res.send(200).send()).catch(() => res.status(404).send)
+  actions.addGame(req.body.id, req.body.name, req.body.genre).then(() => res.sendStatus(200)).catch(() => res.status(404).send)
   return null
 }
 
@@ -48,7 +48,7 @@ export const getGamesWeb = (_req: Request, res: Response): null => {
  */
 
 export const delGameWeb = (req: Request, res: Response): null => {
-  actions.delGame(+req.params.id).then(() => res.status(200).send()).catch(() => res.status(404).send())
+  actions.delGame(+req.params.id).then(() => res.sendStatus(200)).catch(() => res.status(404).send())
   return null
 }
 
@@ -60,7 +60,7 @@ export const delGameWeb = (req: Request, res: Response): null => {
  * @returns null
  */
 export const updateGameWeb = (req: Request, res: Response): null => {
-  actions.updateGame(req.body.id, req.body.name, req.body.genre).then(() => res.status(200).send()).catch(() => res.status(404).send)
+  actions.updateGame(req.body.id, req.body.name, req.body.genre).then(() => res.sendStatus(200)).catch(() => res.status(404).send)
   return null
 }
 

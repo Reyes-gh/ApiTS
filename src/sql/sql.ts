@@ -86,7 +86,7 @@ export default class Sql implements GameMethods {
    */
   async getGames (): Promise<Game[]> {
     return await new Promise<Game[]>((resolve, reject) => {
-      connection.query('SELECT * FROM games', function (error, results) {
+      connection.query('SELECT * FROM games ORDER BY id', function (error, results) {
         if (error != null) {
           reject(error)
           console.log('No se han podido cargar los juegos')
