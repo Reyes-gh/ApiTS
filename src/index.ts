@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
 
 import express from 'express' // ESModules
 import routes from './routes/routes' // Importamos las rutas
@@ -16,3 +18,63 @@ app.use(routes) // Pasamos por parámetro de uso a la app las rutas '/' para las
 app.listen(PORT, () => {
   console.log(`Servidor abierto en puerto ${PORT}`)
 })
+
+const session = require('express-session')
+
+app.set('view engine', 'ejs')
+
+app.use(session({
+  resave: false,
+  saveUninitialized: true,
+  secret: 'SECRET'
+}))
+
+app.get('/googleauth', function (_req, res) {
+  res.render('../views/pages/auth.ejs')
+})
+const passport = require('passport')
+let userProfile: any
+
+app.use(passport.initialize())
+app.use(passport.session())
+
+app.get('/success', (_req, res) => {
+  res.render('../views/pages/success.ejs', { user: userProfile })
+})
+app.get('/error', (_req, res) => res.send('error logging in'))
+
+passport.serializeUser(function (user: any, cb: (arg0: null, arg1: any) => void) {
+  cb(null, user)
+})
+
+passport.deserializeUser(function (obj: any, cb: (arg0: null, arg1: any) => void) {
+  cb(null, obj)
+})
+
+/*  Google AUTH  */
+
+const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy
+const GOOGLE_CLIENT_ID = '1055791708735-bkgr6b6n55t6v7ktieg5boq96ectqd2s.apps.googleusercontent.com'
+const GOOGLE_CLIENT_SECRET = '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'
+
+passport.use(new GoogleStrategy({
+  clientID: GOOGLE_CLIENT_ID,
+  clientSecret: GOOGLE_CLIENT_SECRET,
+  callbackURL: 'http://localhost:3000'
+},
+function (_accessToken: any, _refreshToken: any, profile: any, done: (arg0: null, arg1: any) => any) {
+  userProfile = profile
+  return done(null, userProfile)
+}
+))
+
+app.get('/auth/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] }))
+
+app.get('/',
+  passport.authenticate('google', { failureRedirect: '/error' }),
+  function (_req, res) {
+    res.redirect('/success')
+  })
+
+export default app
