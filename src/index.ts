@@ -83,19 +83,19 @@ function (_accessToken: any, _refreshToken: any, profile: any, done: (arg0: null
 app.get('/games', secured, web.getGamesWeb)
 
 // Apartado 2 (Devolverá un juego por su ID)
-app.get('/games/:id', web.getGameWeb)
+app.get('/games/:id', secured, web.getGameWeb)
 
 // Apartado 3 (Devolverá juegos mediante DTO (los que compartan mismo género por ejemplo))
-app.get('/games/genre/:dto', web.getDTOWeb)
+app.get('/games/genre/:dto', secured, web.getDTOWeb)
 
 // Apartado 4 (Añadirá un nuevo juego pasándole un JSON en el body)
-app.post('/games', web.addGameWeb)
+app.post('/games', secured, web.addGameWeb)
 
 // Apartado 5 (Actualizará un juego)
-app.put('/games', web.updateGameWeb)
+app.put('/games', secured, web.updateGameWeb)
 
 // Apartado 6 (Borrará un juego por su id)
-app.delete('/games/:id', web.delGameWeb)
+app.delete('/games/:id', secured, web.delGameWeb)
 
 /*
 
