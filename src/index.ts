@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 
-import express from 'express' // ESModules
+import express from 'express'
 import routes from './routes/routes' // Importamos las rutas
-
 /**
  * Para compilar el programa debermos ejecutar npm run start en la línea de comandos.
  * Si queremos ejecutarlo y actualizarlo en tiempo real deberemos acceder al script dev mediante npm run dev.
@@ -13,13 +14,14 @@ import routes from './routes/routes' // Importamos las rutas
 const app = express()
 app.use(express.json()) // middleware que transforma la req.body a un json
 const PORT = 3000
-app.use(routes) // Pasamos por parámetro de uso a la app las rutas '/' para las acciones de la API
 
 app.listen(PORT, () => {
   console.log(`Servidor abierto en puerto ${PORT}`)
 })
+app.use(express.json()) // middleware que transforma la req.body a un json
 
 const session = require('express-session')
+app.use(routes)
 
 app.set('view engine', 'ejs')
 
@@ -36,6 +38,7 @@ const passport = require('passport')
 let userProfile: any
 
 app.use(passport.initialize())
+
 app.use(passport.session())
 
 app.get('/success', (_req, res) => {
@@ -51,8 +54,6 @@ passport.deserializeUser(function (obj: any, cb: (arg0: null, arg1: any) => void
   cb(null, obj)
 })
 
-/*  Google AUTH  */
-
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy
 const GOOGLE_CLIENT_ID = '1055791708735-bkgr6b6n55t6v7ktieg5boq96ectqd2s.apps.googleusercontent.com'
 const GOOGLE_CLIENT_SECRET = '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'
@@ -67,6 +68,17 @@ function (_accessToken: any, _refreshToken: any, profile: any, done: (arg0: null
   return done(null, userProfile)
 }
 ))
+
+/*
+
+//Si utilizamos este app.use todas las URL de la API REST llamarán al autentificador de google.
+//Sin embargo, al intentar conseguir un get mediante /games también llamará a la auth de google,
+//entrando en un bucle infinito.
+
+app.use('/',
+  passport.authenticate('google', { scope: ['profile', 'email'] }))
+
+  */
 
 app.get('/auth/google',
   passport.authenticate('google', { scope: ['profile', 'email'] }))

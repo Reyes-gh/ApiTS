@@ -1,6 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import * as actions from '../game/compressor/compressor'
 import { Request, Response } from 'express'
-
 /**
  * addGameWeb se encarga de recoger en el parámetro req las características del juego y usarlo en el método addGame, esperando o un OK (200)
  * o un error (404)

@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import express from 'express'
 import * as web from '../controllers/gameHttp'
 const route = express.Router()
