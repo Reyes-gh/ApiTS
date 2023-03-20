@@ -2,9 +2,9 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import express from 'express'
-import * as web from '../controllers/gameHttp'
+// import * as web from '../controllers/gameHttp'
 const route = express.Router()
-
+/*
 // Apartado 1 (Devolverá todos los juegos)
 route.get('/games', web.getGamesWeb)
 
@@ -22,5 +22,5 @@ route.put('/games', web.updateGameWeb)
 
 // Apartado 6 (Borrará un juego por su id)
 route.delete('/games/:id', web.delGameWeb)
-
+*/
 export default route

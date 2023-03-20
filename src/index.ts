@@ -4,7 +4,9 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 
 import express from 'express'
-import routes from './routes/routes' // Importamos las rutas
+// import routes from './routes/routes'
+
+import * as web from './controllers/gameHttp' // Importamos las rutas
 /**
  * Para compilar el programa debermos ejecutar npm run start en la línea de comandos.
  * Si queremos ejecutarlo y actualizarlo en tiempo real deberemos acceder al script dev mediante npm run dev.
@@ -21,7 +23,7 @@ app.listen(PORT, () => {
 app.use(express.json()) // middleware que transforma la req.body a un json
 
 const session = require('express-session')
-app.use(routes)
+// app.use(routes)
 
 app.set('view engine', 'ejs')
 
@@ -30,6 +32,14 @@ app.use(session({
   saveUninitialized: true,
   secret: 'SECRET'
 }))
+
+const secured = (req: any, res: any, next: any) => {
+  if (req.user) {
+    return next()
+  }
+  req.session.returnTo = req.originalUrl
+  res.redirect('/googleauth')
+}
 
 app.get('/googleauth', function (_req, res) {
   res.render('../views/pages/auth.ejs')
@@ -41,7 +51,7 @@ app.use(passport.initialize())
 
 app.use(passport.session())
 
-app.get('/success', (_req, res) => {
+app.get('/success', secured, (_req, res) => {
   res.render('../views/pages/success.ejs', { user: userProfile })
 })
 app.get('/error', (_req, res) => res.send('error logging in'))
@@ -61,13 +71,31 @@ const GOOGLE_CLIENT_SECRET = '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'
 passport.use(new GoogleStrategy({
   clientID: GOOGLE_CLIENT_ID,
   clientSecret: GOOGLE_CLIENT_SECRET,
-  callbackURL: 'http://localhost:3000'
+  callbackURL: 'http://localhost:3000/auth/google/callback'
 },
 function (_accessToken: any, _refreshToken: any, profile: any, done: (arg0: null, arg1: any) => any) {
   userProfile = profile
   return done(null, userProfile)
 }
 ))
+
+// Apartado 1 (Devolverá todos los juegos)
+app.get('/games', secured, web.getGamesWeb)
+
+// Apartado 2 (Devolverá un juego por su ID)
+app.get('/games/:id', web.getGameWeb)
+
+// Apartado 3 (Devolverá juegos mediante DTO (los que compartan mismo género por ejemplo))
+app.get('/games/genre/:dto', web.getDTOWeb)
+
+// Apartado 4 (Añadirá un nuevo juego pasándole un JSON en el body)
+app.post('/games', web.addGameWeb)
+
+// Apartado 5 (Actualizará un juego)
+app.put('/games', web.updateGameWeb)
+
+// Apartado 6 (Borrará un juego por su id)
+app.delete('/games/:id', web.delGameWeb)
 
 /*
 
@@ -83,7 +111,7 @@ app.use('/',
 app.get('/auth/google',
   passport.authenticate('google', { scope: ['profile', 'email'] }))
 
-app.get('/',
+app.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/error' }),
   function (_req, res) {
     res.redirect('/success')
