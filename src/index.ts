@@ -32,7 +32,7 @@ app.use(session({
   saveUninitialized: true,
   secret: 'SECRET'
 }))
-
+// Implementamos el método secured para asegurarnos de que el usuario está autenticado
 const secured = (req: any, res: any, next: any) => {
   if (req.user) {
     return next()
@@ -78,6 +78,10 @@ function (_accessToken: any, _refreshToken: any, profile: any, done: (arg0: null
   return done(null, userProfile)
 }
 ))
+
+// APLICAMOS EL MÉTODO SECURED A TODAS LAS RUTAS
+// UNA VEZ SE INICIE SESIÓN Y SE VUELVA A INTENTAR LLAMAR A
+// UNA DE LAS RUTAS LAS DEVOLVERÁ CORRECTAMENTE
 
 // Apartado 1 (Devolverá todos los juegos)
 app.get('/games', secured, web.getGamesWeb)
